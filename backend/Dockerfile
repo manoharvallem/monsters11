@@ -14,7 +14,7 @@ COPY package*.json ./
 # Install the application dependencies inside the container.
 # 'npm ci' is often recommended for CI/CD environments as it installs exact versions
 # from package-lock.json, ensuring reproducible builds.
-RUN npm ci
+RUN npm install
 
 # Copy the rest of your application's source code into the container.
 # The '.' refers to the build context (our 'backend' folder), and the second '.'

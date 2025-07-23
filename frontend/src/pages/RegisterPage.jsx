@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import AuthForm from '../components/AuthForm';
 
@@ -17,17 +17,7 @@ function RegisterPage() {
     }
   };
 
-  return (
-    <div>
-      <AuthForm formType="register" onSubmit={handleRegister} error={error} />
-       <p className="mt-4 text-sm text-center text-gray-400">
-        Already have an account?{' '}
-        <Link to="/login" className="font-medium text-cyan-400 hover:underline">
-          Log In
-        </Link>
-      </p>
-    </div>
-  );
+  return <AuthForm formType="register" onSubmit={handleRegister} error={error} />;
 }
 
 export default RegisterPage;

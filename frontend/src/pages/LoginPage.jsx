@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import AuthForm from '../components/AuthForm';
 
@@ -17,17 +17,7 @@ function LoginPage() {
     }
   };
 
-  return (
-    <div>
-      <AuthForm formType="login" onSubmit={handleLogin} error={error} />
-      <p className="mt-4 text-sm text-center text-gray-400">
-        Don't have an account?{' '}
-        <Link to="/register" className="font-medium text-cyan-400 hover:underline">
-          Register
-        </Link>
-      </p>
-    </div>
-  );
+  return <AuthForm formType="login" onSubmit={handleLogin} error={error} />;
 }
 
 export default LoginPage;

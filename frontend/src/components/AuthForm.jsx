@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 function AuthForm({ formType, onSubmit, error }) {
   const [username, setUsername] = useState('');
@@ -8,6 +9,8 @@ function AuthForm({ formType, onSubmit, error }) {
     e.preventDefault();
     onSubmit({ username, password });
   };
+
+  const isLogin = formType === 'login';
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-900">
@@ -59,10 +62,19 @@ function AuthForm({ formType, onSubmit, error }) {
               type="submit"
               className="w-full px-4 py-2 font-semibold text-white bg-cyan-600 rounded-md hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-cyan-500 transition duration-200"
             >
-              {formType === 'login' ? 'Log In' : 'Register'}
+              {isLogin ? 'Log In' : 'Register'}
             </button>
           </div>
         </form>
+        <p className="text-sm text-center text-gray-400">
+          {isLogin ? "Don't have an account?" : 'Already have an account?'}{' '}
+          <Link
+            to={isLogin ? '/register' : '/login'}
+            className="font-medium text-cyan-400 hover:underline"
+          >
+            {isLogin ? 'Register' : 'Log In'}
+          </Link>
+        </p>
       </div>
     </div>
   );

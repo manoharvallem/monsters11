@@ -1,0 +1,66 @@
+# docker-compose.yml
+# This file defines the multi-container Docker application for Monsters11.
+# It orchestrates the frontend, backend, and database services.
+
+services:
+  #---------------------------------
+  # MongoDB Database Service
+  #---------------------------------
+  mongodb:
+    image: mongo:latest # Use the official MongoDB image
+    container_name: monsters11-db
+    ports:
+      - "27017:27017" # Expose MongoDB port to the host (optional, for debugging)
+    volumes:
+      - mongo-data:/data/db # Persist database data using a named volume
+    networks:
+      - monsters11-network # Connect to the custom network
+
+  #---------------------------------
+  # Backend API Service (Node.js)
+  #---------------------------------
+  backend:
+    build:
+      context: ./backend # Path to the backend's Dockerfile and source
+      dockerfile: Dockerfile
+    container_name: monsters11-backend
+    ports:
+      - "5000:5000" # Map host port 5000 to container port 5000
+    volumes:
+      - ./backend:/app # Mount backend source code for development hot-reloading
+      - /app/node_modules # Do not map the host node_modules folder into the container
+    env_file:
+      - ./backend/.env # Load environment variables from the .env file
+    depends_on:
+      - mongodb # Ensure the database is running before the backend starts
+    networks:
+      - monsters11-network
+
+  #---------------------------------
+  # Frontend Service (React)
+  #---------------------------------
+  frontend:
+    build:
+      context: ./frontend # Path to the frontend's Dockerfile and source
+      dockerfile: Dockerfile
+    container_name: monsters11-frontend
+    ports:
+      - "3000:80" # <-- THE FIX IS HERE! Map host port 3000 to container port 80.
+    volumes:
+      - ./frontend:/app # Mount frontend source code for development hot-reloading
+      - /app/node_modules # Do not map the host node_modules folder into the container
+    depends_on:
+      - backend # Ensure the backend is running before the frontend starts
+    networks:
+      - monsters11-network
+
+#---------------------------------
+# Networks and Volumes
+#---------------------------------
+networks:
+  monsters11-network:
+    driver: bridge # Use the default bridge driver for the network
+
+volumes:
+  mongo-data: # Define the named volume for MongoDB data persistence
+    driver: local
